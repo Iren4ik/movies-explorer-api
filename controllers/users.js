@@ -6,7 +6,12 @@ const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
-const { Created } = require('../utils/statuses');
+const {
+  Created,
+  ConflictMessage,
+  BadRequestMessage,
+  UserNotFoundMessage,
+} = require('../utils/constants');
 
 const createUser = (req, res, next) => {
   const { name, email, password } = req.body;
@@ -19,9 +24,9 @@ const createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь с таким email уже существует'));
+        next(new ConflictError(ConflictMessage));
       } else if (err instanceof Error.ValidationError) {
-        next(new BadRequestError(`Некорректные данные: ${err.message}`));
+        next(new BadRequestError(`${BadRequestMessage} : ${err.message}`));
       } else {
         next(err);
       }
@@ -44,9 +49,9 @@ const getMeUser = (req, res, next) => {
     .then((currentUser) => res.send(currentUser))
     .catch((err) => {
       if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError('Пользователь с таким id не найден'));
+        next(new NotFoundError(UserNotFoundMessage));
       } else if (err instanceof Error.CastError) {
-        next(new BadRequestError(`Некорректные данные: ${err.message}`));
+        next(new BadRequestError(`${BadRequestMessage} : ${err.message}`));
       } else {
         next(err);
       }
@@ -60,11 +65,11 @@ const editProfile = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь с таким email уже существует'));
+        next(new ConflictError(ConflictMessage));
       } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError('Пользователь с таким id не найден'));
+        next(new NotFoundError(UserNotFoundMessage));
       } else if (err instanceof Error.ValidationError) {
-        next(new BadRequestError(`Некорректные данные: ${err.message}`));
+        next(new BadRequestError(`${BadRequestMessage} : ${err.message}`));
       } else {
         next(err);
       }

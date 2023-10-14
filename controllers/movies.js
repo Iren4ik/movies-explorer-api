@@ -3,14 +3,21 @@ const Movie = require('../models/movie');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
-const { Created } = require('../utils/statuses');
+const {
+  Created,
+  BadRequestMessage,
+  FilmsNotFoundMessage,
+  MovieDeleteMessage,
+  MovieForbiddenMessage,
+  MovieNotFoundMessage,
+} = require('../utils/constants');
 
 const getSavedMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
     .then((movies) => res.send(movies))
     .catch((err) => {
       if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError('Фильмы не найдены'));
+        next(new NotFoundError(FilmsNotFoundMessage));
       } else {
         next(err);
       }
@@ -48,7 +55,7 @@ const createMovie = (req, res, next) => {
     .then((movie) => res.status(Created).send(movie))
     .catch((err) => {
       if (err instanceof Error.ValidationError) {
-        next(new BadRequestError(`Некорректные данные: ${err.message}`));
+        next(new BadRequestError(`${BadRequestMessage} : ${err.message}`));
       } else {
         next(err);
       }
@@ -61,17 +68,17 @@ const deleteSavedMovie = (req, res, next) => {
     .then((movie) => {
       if (movie.owner.equals(req.user._id)) {
         Movie.deleteOne(movie)
-          .then(() => res.send({ message: 'Фильм удален' }))
+          .then(() => res.send({ message: MovieDeleteMessage }))
           .catch(next);
       } else {
-        throw new ForbiddenError('Чужой фильм удалить нельзя');
+        throw new ForbiddenError(MovieForbiddenMessage);
       }
     })
     .catch((err) => {
       if (err instanceof Error.CastError) {
-        next(new BadRequestError(`Некорректные данные: ${err.message}`));
+        next(new BadRequestError(`${BadRequestMessage} : ${err.message}`));
       } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError('Фильм с таким id не найден'));
+        next(new NotFoundError(MovieNotFoundMessage));
       } else {
         next(err);
       }
