@@ -11,9 +11,6 @@ router.use('/signin', signinRouter);
 router.use(auth); // все роуты ниже этой строки будут защищены
 router.use('/users', usersRouter);
 router.use('/movies', moviesRouter);
-
-router.use('*', (req, res, next) => {
-  next(new NotFoundError('страница не найдена.'));
-});
+router.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
 module.exports = router;
