@@ -2,9 +2,6 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../utils/config');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-// node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"
-// console.log(SECRET_KEY);
-
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
   // убеждаемся, что токен есть или начинается с Bearer
