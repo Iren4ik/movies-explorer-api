@@ -1,6 +1,34 @@
-# movies-explorer-api
+# Проект: Навигатор фильмов (backend)
 
-Бэкенд дипломного проекта для курса "Веб-разработчик" от Яндекс Практикум.
+Дипломный проект в рамках курса "Веб-разработчик" от Яндекс Практикум.
+Проект представляет из себя бэкенд часть для проекта [Навигатор фильмов](https://github.com/iren4ik/movies-explorer-frontend).
+Проект призван закрепить навыки backend-разработки и способы развёртывания приложения на Node.js и Express, а также работе с БД MongoDB и ODM mongoose.
+
+## Функциональность проекта
+
+- В проекте созданы схемы и модели пользователей и карточек с контентом:
+  - `movie` — схема карточки с контентом
+  - `user` — схема пользователя
+- В проекте созданы эндпоинты:
+  - `/movies` — обрабатывает:
+    - GET запросы — отдаёт все карточки из БД
+    - POST запросы — создаёт новую карточку с контентом
+  - `/movies/:cardId` — обрабатывает DELETE запросы, удаляет карточку по `cardId`
+  - `/signin` — обрабатывает POST запросы, производит аутентификацию пользователя
+  - `/signup` — обрабатывает POST запросы, производит регистрацию пользователя
+  - `/signout` — обрабатывает POST запросы, производит выход пользователя
+  - `/users/me` — обрабатывает:
+    - GET запросы — отдаёт всех информацию о пользователе
+    - PATCH запросы — обновляет информацию о пользователе
+- Созданы мидлвары:
+  - Авторизации пользователя
+  - Валидации поступающих в запросе данных
+  - Централизованной обработки ошибок
+  - Ограничитель количества запросов (защита от DDoS атак)
+  - Логирования
+- Производится валидация поступающих данных:
+  - до передачи информации контроллерам с помощью celebrate
+  - на уровне схем с помощью validator и встроенных методов mongoose
 
 ## Директории
 
@@ -16,29 +44,34 @@
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
 
-## Ссылки
+## Используемые технологии
 
-IP 158.160.22.5
+- [Node.js](https://nodejs.org/ru)
+- [nodemon](https://nodemon.io/)
+- [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [mongoose](https://mongoosejs.com/)
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
+- [celebrate](https://www.npmjs.com/package/celebrate)
+- [validator](https://www.npmjs.com/package/validator)
+- [express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
+- [helmet](https://helmetjs.github.io/)
+- [winston](https://www.npmjs.com/package/winston)
+- [express-winston](https://www.npmjs.com/package/express-winston)
+- [ESLint](https://eslint.org/)
 
-Ссылка на репозиторий проекта: 
-https://github.com/Iren4ik/movies-explorer-api
+### Чему я научилась
 
-Ссылка на API сервер проекта:
-https://api.movies.nomoredomainsrocks.ru/
-
-## Технологии
-
-- Node.js
-- nodemon
-- Express
-- MongoDB
-- mongoose
-- bcryptjs
-- jsonwebtoken
-- celebrate
-- validator
-- express-rate-limit
-- helmet
-- winston
-- express-winston
-- ESLint
+- Разворачивать приложение на Node.js
+- Использовать в работе фреймворк Express
+- Работать с БД MongoDB
+- Использовать в работе с БД ODM mongoose
+- Создавать схемы и модели для работы с БД
+- Обрабатывать различные виды запросов
+- Обрабатывать ошибки некорректных запросов
+- Валидировать приходящую в запросе информацию
+- Работать с JWT токеном
+- Базовой защите приложения
+- Логированию
+- Деплою проекта на реальный хостинг
